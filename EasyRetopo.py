@@ -5,6 +5,7 @@ import math
 #This script is made by Maliohammad 2017/2
 
 def main():
+    bc = c4d.BaseContainer()  
     obj = doc.GetActiveObject()
     spline = obj.GetDown()
     if spline == None or spline.GetType() !=5101:
@@ -13,6 +14,12 @@ def main():
     clo = c4d.BaseObject(1018544) # define cloner 
     cir = c4d.BaseObject(5179) # define n-side spline 
     shrink = c4d.BaseObject(1019774) #define the shrink swrap deformer 
+    if c4d.gui.GetInputState(c4d.BFM_INPUT_KEYBOARD,c4d.BFM_INPUT_CHANNEL,bc):
+        if bc[c4d.BFM_INPUT_QUALIFIER] & c4d.QSHIFT:
+            clo[c4d.MG_OBJECT_ALIGN] = False
+        else :
+            clo[c4d.MG_OBJECT_ALIGN] = True
+    
     #get the circle segments 
     seg =int(gui.InputDialog("set segments count ",12))
     guide = spline.GetDown() #get the spline child
@@ -27,6 +34,8 @@ def main():
     clo[c4d.ID_MG_MOTIONGENERATOR_MODE]=0
     clo[c4d.MG_OBJECT_LINK] = spline
     clo[c4d.MG_SPLINE_MODE]=3 #set the spline clone mode to vertex 
+
+
     shrink[c4d.SHRINKWRAP_TARGETOBJECT] = obj #set the selected object in the object field 
     shrink[c4d.SHRINKWRAP_MODE]=2 #change shrink wrap deformer to source axis 
     shrink[c4d.ID_BASEOBJECT_VISIBILITY_EDITOR]=1 #hide the deformer from editor 
@@ -47,7 +56,6 @@ def main():
     cir[c4d.PRIM_NSIDE_RADIUS] = float(d)/2.0
     cir[c4d.PRIM_NSIDE_SIDES] = seg
     #the code below make the cloner editable 
-    bc = c4d.BaseContainer()  
     res = c4d.utils.SendModelingCommand(
 
                               command = c4d.MCOMMAND_MAKEEDITABLE,
@@ -64,6 +72,7 @@ def main():
         c.InsertUnder(loft)
     loft[c4d.LOFTOBJECT_SUBX] = seg + 1
     loft[c4d.LOFTOBJECT_SUBY] = 2
+    loft[c4d.LOFTOBJECT_ISOPARM] = seg +1
     loft[c4d.LOFTOBJECT_ADAPTIVEY]=False
     loft[c4d.CAP_START]=0
     loft[c4d.CAP_END]=0
@@ -71,7 +80,7 @@ def main():
     phong = c4d.BaseTag(c4d.Tphong)
     loft.InsertTag(phong)
     phong[c4d.PHONGTAG_PHONG_ANGLELIMIT]=True
-    phong[c4d.PHONGTAG_PHONG_ANGLE]=0.698
+    phong[c4d.PHONGTAG_PHONG_ANGLE]=0.67
     res[0].Remove()
     c4d.EventAdd()
 
