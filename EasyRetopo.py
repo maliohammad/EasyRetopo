@@ -67,6 +67,7 @@ def main():
     loft[c4d.LOFTOBJECT_ADAPTIVEY]=False
     loft[c4d.CAP_START]=0
     loft[c4d.CAP_END]=0
+    loft[c4d.LOFTOBJECT_FLIPNORMALS]=True
     phong = c4d.BaseTag(c4d.Tphong)
     loft.InsertTag(phong)
     phong[c4d.PHONGTAG_PHONG_ANGLELIMIT]=True
